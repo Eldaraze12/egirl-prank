@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Korku Şakası</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #000;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      font-family: sans-serif;
+      color: white;
+    }
+
+    button {
+      padding: 1rem 2rem;
+      font-size: 1.5rem;
+      background: crimson;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin: 10px;
+    }
+
+    .loader {
+      border: 16px solid #333;
+      border-top: 16px solid #00ff00;
+      border-radius: 50%;
+      width: 100px;
+      height: 100px;
+      animation: spin 1s linear infinite;
+      display: none;
+      margin-top: 20px;
+    }
+
+    .freeze {
+      animation: none !important;
+      border-top-color: red !important;
+    }
+
+    #clickBtn {
+      display: none;
+    }
+
+    .scare-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      background: black;
+      display: none;
+    }
+
+    .scare-container img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <button id="startBtn">🚀 Başlat</button>
+  <div class="loader" id="loader"></div>
+  <button id="clickBtn">👉 Tıkla!</button>
+
+  <div class="scare-container" id="scareBox">
+    <img id="img1" src="korku1.jpg" />
+    <img id="img2" src="korku2.jpg" style="display:none;" />
+    <img id="img3" src="korku3.jpg" style="display:none;" />
+    <audio id="scream" src="Scary Scream Sound Effect.mp3" loop></audio>
+  </div>
+
+  <script>
+    const startBtn = document.getElementById('startBtn');
+    const loader = document.getElementById('loader');
+    const clickBtn = document.getElementById('clickBtn');
+    const scareBox = document.getElementById('scareBox');
+    const scream = document.getElementById('scream');
+    const images = [
+      document.getElementById('img1'),
+      document.getElementById('img2'),
+      document.getElementById('img3')
+    ];
+
+    let glitchInterval;
+
+    startBtn.addEventListener('click', () => {
+      startBtn.style.display = 'none';
+      loader.style.display = 'block';
+
+      setTimeout(() => {
+        loader.classList.add('freeze');
+        clickBtn.style.display = 'inline-block';
+      }, 5000);
+    });
+
+    clickBtn.addEventListener('click', () => {
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen(); // Tam ekran
+      }
+      scareBox.style.display = 'block';
+      scream.play();
+
+      let i = 0;
+      glitchInterval = setInterval(() => {
+        images.forEach((img, index) => {
+          img.style.display = index === i % images.length ? 'block' : 'none';
+        });
+        i++;
+      }, 50); // 50ms = 20 görüntü/sn
+    });
+  </script>
+
+</body>
+</html>
