@@ -100,6 +100,7 @@
     ];
 
     let glitchInterval;
+    let audioCtx, source, gainNode;
 
     startBtn.addEventListener('click', () => {
       startBtn.style.display = 'none';
@@ -117,9 +118,14 @@
       }
 
       scareBox.style.display = 'block';
-      
-      // Ses yüksekliği artırıldı (1.0 max, 2.0 = 2x)
-      scream.volume = 2.0;
+
+      // Web Audio API ile sesi 300 katına çıkar
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      source = audioCtx.createMediaElementSource(scream);
+      gainNode = audioCtx.createGain();
+      gainNode.gain.value = 300; // Tehlikeli derecede yüksek!
+
+      source.connect(gainNode).connect(audioCtx.destination);
       scream.play();
 
       let i = 0;
@@ -128,7 +134,7 @@
           img.style.display = index === i % images.length ? 'block' : 'none';
         });
         i++;
-      }, 40); // Daha hızlı glitch (daha korkunç)
+      }, 50);
     });
   </script>
 
