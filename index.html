@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Standoff2</title>
+  <title>Korku Şakası</title>
   <style>
     html, body {
       margin: 0;
@@ -100,7 +100,6 @@
     ];
 
     let glitchInterval;
-    let audioCtx, source, gainNode;
 
     startBtn.addEventListener('click', () => {
       startBtn.style.display = 'none';
@@ -118,14 +117,9 @@
       }
 
       scareBox.style.display = 'block';
-
-      // Web Audio API ile sesi 300 katına çıkar
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      source = audioCtx.createMediaElementSource(scream);
-      gainNode = audioCtx.createGain();
-      gainNode.gain.value = 300; // Tehlikeli derecede yüksek!
-
-      source.connect(gainNode).connect(audioCtx.destination);
+      
+      // Ses yüksekliği artırıldı (1.0 max, 2.0 = 2x)
+      scream.volume = 2.0;
       scream.play();
 
       let i = 0;
@@ -134,7 +128,7 @@
           img.style.display = index === i % images.length ? 'block' : 'none';
         });
         i++;
-      }, 50);
+      }, 40); // Daha hızlı glitch (daha korkunç)
     });
   </script>
 
